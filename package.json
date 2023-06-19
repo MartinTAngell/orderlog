@@ -1,0 +1,27 @@
+{
+  "name": "constructionproject",
+  "version": "1.0.0",
+  "description": "A simple construction order log with some front end code witten by ChatGPT",
+  "main": "app.js",
+  "scripts": {
+    "startup": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MartinTAngell/orderlog.git"
+  },
+  "author": "Martin T. Angell",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MartinTAngell/orderlog/issues"
+  },
+  "homepage": "https://github.com/MartinTAngell/orderlog#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.3.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1",
+    "nodemon": "^2.0.22"
+  }
+}

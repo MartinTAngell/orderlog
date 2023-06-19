@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Change Order Log</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    input[type="text"], input[type="date"] {
+      width: 100%;
+      padding: 6px;
+      margin: 4px 0;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 8px 16px;
+      margin: 4px 0;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Change Order Log</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Order Number</th>
+          <th>Date Created</th>
+          <th>Description</th>
+          <th>Team Code</th>
+          <th>Date Closed</th>
+        </tr>
+      </thead>
+      <tbody id="changeOrderLog">
+        <!-- Change order log entries will be added here -->
+      </tbody>
+    </table>
+
+    <h2>Add New Change Order</h2>
+    <form id="changeOrderForm">
+      <label for="orderNumber">Order Number:</label>
+      <input type="text" id="orderNumber" name="orderNumber" required>
+      
+      <label for="dateCreated">Date Created:</label>
+      <input type="date" id="dateCreated" name="dateCreated" required>
+      
+      <label for="description">Description (max 120 characters):</label>
+      <input type="text" id="description" name="description" maxlength="120" required>
+      
+      <label for="teamCode">Team Code (max 10 characters):</label>
+      <input type="text" id="teamCode" name="teamCode" maxlength="10" required>
+      
+      <label for="dateClosed">Date Closed:</label>
+      <input type="date" id="dateClosed" name="dateClosed">
+      
+      <button type="submit">Add Change Order</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('changeOrderForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const orderNumber = document.getElementById('orderNumber').value;
+      const dateCreated = document.getElementById('dateCreated').value;
+      const description = document.getElementById('description').value;
+      const teamCode = document.getElementById('teamCode').value;
+      const dateClosed = document.getElementById('dateClosed').value;
+
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td>${orderNumber}</td>
+        <td>${dateCreated}</td>
+       
+
+ <td>${description}</td>
+        <td>${teamCode}</td>
+        <td>${dateClosed}</td>
+      `;
+
+      document.getElementById('changeOrderLog').appendChild(newRow);
+
+      // clear input fields after submit
+      document.getElementById('orderNumber').value = '';
+      document.getElementById('dateCreated').value = '';
+      document.getElementById('description').value = '';
+      document.getElementById('teamCode').value = '';
+      document.getElementById('dateClosed').value = '';
+    });
+  </script>
+</body>
+</html>
