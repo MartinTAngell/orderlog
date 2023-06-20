@@ -119,9 +119,28 @@
     }
     fetchAPI();
 
+    async function insertRowIntoDB(orderNumber, dateCreated, description, teamCode, dateClosed) {
+      const response = await fetch("http://localhost:3000/orders", {
+        method: "POST",
+        body: JSON.stringify({
+          orderNumber: orderNumber,
+          dateCreated: dateCreated,
+          description: description,
+          teamCode: teamCode,
+          dateClosed: dateClosed
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      })
+        .then((response) => response.json())
+        .then((json) => console.log(json));
+    }
+
     document.getElementById('changeOrderForm').addEventListener('submit', function (event) {
       event.preventDefault();
       makeNewRow(orderNumber.value, dateCreated.value, description.value, teamCode.value, dateClosed.value);
+      insertRowIntoDB(orderNumber.value, dateCreated.value, description.value, teamCode.value, dateClosed.value);
 
       // clear input fields after submit
       document.getElementById('orderNumber').value = '';

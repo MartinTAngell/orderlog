@@ -18,6 +18,9 @@ Information Log
 	* [Writing order.js](#orderjs)
 	* [Writing orders.js (Part 2)](#ordersjs-part-2)
 	* [Writing orders.js (Part 3)](#ordersjs-part-3)
+* [Changing index.html](#modifying-the-original-code)
+	* [Fetching Data](#fetching-data)
+	* [Inserting New Data](#sending-post-data)
 ---
 ## Setup
 ### GitHub Repository
@@ -240,6 +243,7 @@ router.post('/', async (req, res) => {
 - We are using the format "req.body.(dataName)" to get the data from the POST request being sent into the API
 - The object called "order" is what we are storing all of this data inside. It takes the form of the Order schema from "order.js", which means the database will recognize what it is.
 - Those fun little numbers in "res.status" are status codes. For more info click [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status).
+---
 ## Modifying the Original Code
 ### Fetching data
 - FINALLY, we have created the database, and now we will be able to fetch our data and put it on the change order log.
@@ -269,3 +273,46 @@ router.post('/', async (req, res) => {
 ```
 - Once again, I must explain... yay....... The function takes in all the data needed for the new row. Then it creates a new element with all the data it needs, and then it puts them inside the table.
 - Then the asynchronous function fetchAPI uses async/await to get all the data from the database, and then for each entry, creating a new row.
+- This won't actually show anything yet, cause we haven't added anything into the database yet
+### Sending Post Data
+- This will be the last programming that we have to do.
+- We will be making it so the "Add Change Order" form actually saves data to the database
+- We will start by creating a new async function. See below
+```Javascript
+    async function insertRowIntoDB(orderNumber, dateCreated, description, teamCode, dateClosed) {
+      const response = await fetch("http://localhost:3000/orders", {
+        method: "POST",
+        body: JSON.stringify({
+          orderNumber: orderNumber,
+          dateCreated: dateCreated,
+          description: description,
+          teamCode: teamCode,
+          dateClosed: dateClosed
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      })
+        .then((response) => response.json())
+        .then((json) => console.log(json));
+    }
+```
+- This function takes parameters of all the data we need, creates a new JSON with all of that data, and sends it as a post request to our database.
+- Next we need to change what is inside the event listener for the "Add Change Order" function. See below. Change the existing code to this.
+```Javascript
+    document.getElementById('changeOrderForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      makeNewRow(orderNumber.value, dateCreated.value, description.value, teamCode.value, dateClosed.value);
+      insertRowIntoDB(orderNumber.value, dateCreated.value, description.value, teamCode.value, dateClosed.value);
+
+      // clear input fields after submit
+      document.getElementById('orderNumber').value = '';
+      document.getElementById('dateCreated').value = '';
+      document.getElementById('description').value = '';
+      document.getElementById('teamCode').value = '';
+      document.getElementById('dateClosed').value = '';
+    });
+```
+- This should enable us to create a new entry into the database.
+- This is all the programming required for the project.
+---
