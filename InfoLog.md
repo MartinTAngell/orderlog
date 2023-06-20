@@ -181,7 +181,7 @@ const orderSchema = new mongoose.Schema({
 	},
 	dateClosed: {
 		type: String,
-		required: true,
+		required: false,
 	},
 });
 
