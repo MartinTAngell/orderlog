@@ -240,3 +240,32 @@ router.post('/', async (req, res) => {
 - We are using the format "req.body.(dataName)" to get the data from the POST request being sent into the API
 - The object called "order" is what we are storing all of this data inside. It takes the form of the Order schema from "order.js", which means the database will recognize what it is.
 - Those fun little numbers in "res.status" are status codes. For more info click [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status).
+## Modifying the Original Code
+### Fetching data
+- FINALLY, we have created the database, and now we will be able to fetch our data and put it on the change order log.
+- We will not be modifying the HTML in the main file (yet), but we will be changing the JavaScript at the very end of the file. We will only be modifying with is within the ```<script>``` tag.
+- We are going to be moving the code that creates a new row in the orders table into a new function. This code is going to be moved into a new function. We'll be deleting the old code in a moment. Put the following code immediately after where it says ```<script>```.
+```JavaScript
+    function makeNewRow(orderNumber, dateCreated, description, teamCode, dateClosed) {
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td>${orderNumber}</td>
+        <td>${dateCreated}</td>
+ 		<td>${description}</td>
+        <td>${teamCode}</td>
+        <td>${dateClosed}</td>
+      `;
+
+      document.getElementById('changeOrderLog').appendChild(newRow);
+    }
+    async function fetchAPI() {
+      const response = await fetch("http://localhost:3000/orders");
+      const jsonData = await response.json();
+      jsonData.forEach(data => {
+        makeNewRow(data.orderNumber, data.dateCreated, data.description, data.teamCode, data.dateClosed);
+      });
+    }
+    fetchAPI();
+```
+- Once again, I must explain... yay....... The function takes in all the data needed for the new row. Then it creates a new element with all the data it needs, and then it puts them inside the table.
+- Then the asynchronous function fetchAPI uses async/await to get all the data from the database, and then for each entry, creating a new row.
