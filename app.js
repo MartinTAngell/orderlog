@@ -4,13 +4,16 @@ const app = express();
 const port = 3000;
 const path = require('path');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 
 //Mongoose setup
 main().catch((err) => console.log(err));
 
 async function main() {
 	//Make sure that where I wrote "orders" you write whatever you want the name of the database you are storing to be.
-	await mongoose.connect('mongodb://localhost/orders');
+	const process = dotenv.config().parsed;
+	const connString = process.CONNECTION_STRING;
+	await mongoose.connect(connString);
 }
 
 //Routing for main HTML page
