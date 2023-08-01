@@ -54,6 +54,53 @@
     button:hover {
       opacity: 0.8;
     }
+
+    #container {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    a {
+      background-color: #4CAF50;
+      color: white;
+      padding: 8px 16px;
+      margin: 4px 0;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    a:hover {
+      opacity: 0.8;
+    }
+
+    @page {
+      size: auto;
+      margin: 0mm;
+    }
+
+    @media print {
+      #changeOrderForm {
+        display: none;
+      }
+
+      h1,
+      h2,
+      a {
+        display: none;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    }
   </style>
 </head>
 
@@ -95,9 +142,15 @@
 
       <button type="submit">Add Change Order</button>
     </form>
+    <div id="container">
+      <a href="javascript:if(window.print)window.print()">Print</a>
+      <a href="/" id="downloadButton" download>Download CSV</a>
+    </div>
   </div>
 
   <script>
+    let csv;
+
     function makeNewRow(orderNumber, dateCreated, description, teamCode, dateClosed) {
       const newRow = document.createElement('tr');
       newRow.innerHTML = `
@@ -116,6 +169,11 @@
       jsonData.forEach(data => {
         makeNewRow(data.orderNumber, data.dateCreated, data.description, data.teamCode, data.dateClosed);
       });
+      const downloadButton = document.getElementById("downloadButton");
+      const blob = new Blob([createCSV(jsonData)], { type: 'text/csv' })
+      const url = URL.createObjectURL(blob);
+      downloadButton.href = url;
+      downloadButton.download = 'data.csv';
     }
     fetchAPI();
 
@@ -149,6 +207,30 @@
       document.getElementById('teamCode').value = '';
       document.getElementById('dateClosed').value = '';
     });
+
+    function createCSV(data = []) {
+      const headerKeys = [
+        'orderNumber',
+        'dateCreated',
+        'description',
+        'description',
+        'teamCode',
+        'dateClosed',
+      ];
+      const headers = headerKeys.map((key) => `"${key}"`).join(',');
+      const rows = data.map((row) =>
+        headerKeys
+          .map((key) => {
+            return `"${row[key]}"`;
+          })
+          .join(',')
+      );
+      let final = headers;
+      rows.forEach((row) => {
+        final += `\n${row}`;
+      });
+      return final;
+    };
   </script>
 </body>
 
